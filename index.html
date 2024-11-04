@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Diana</title>
+    <style>
+        /* Estilos de la página */
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Lexend', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            flex-direction: column;
+            padding: 40px 20px;
+        }
+
+        /* Tamaño grande para los textos de título */
+        .title {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 600px) {
+            .title {
+                font-size: 1.5em;
+            }
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Contenedor principal de texto -->
+    <div id="text-container"></div>
+
+    <!-- Archivo de música -->
+    <audio id="background-music" src="music.mp3"></audio>
+
+    <script>
+        // Texto con instrucciones para cada sección
+        const text = [
+            { content: "¡Feliz Cumpleaños Diana!", isTitle: true, isWordByWord: true },
+            { content: "Ojalá hubiera podido pensar en algo más original, pero mi repentino bloqueo creativo me lo hicieron imposible pi pi pi", isTitle: false, isWordByWord: false },
+            { content: "El casooooo… Qué bueno poder seguir acompañándote en fechas como estas. Me hace feliz verte crecer conmigo.", isTitle: false, isWordByWord: false },
+            { content: "Ya sé que te lo digo siempre, pero realmente sos una persona increíble. Ser parte de tu vida, y que vos seas parte de la mía, es lo que muchas veces me mantiene cuerdo o o o o o.", isTitle: false, isWordByWord: false },
+            { content: "TE -QUIERO -MUCHISIMO -DIANA!!! FELIZ -20 -AÑOS", isTitle: true, isWordByWord: true }
+        ];
+
+        const container = document.getElementById("text-container");
+        const music = document.getElementById("background-music");
+        let animationStarted = false;
+
+        // Función para iniciar la animación tras hacer clic
+        document.body.addEventListener("click", () => {
+            if (!animationStarted) {
+                animationStarted = true;
+                animateText(text);
+                music.play();
+            }
+        });
+
+        // Función para animar el texto de acuerdo con las configuraciones
+        function animateText(textArray) {
+            let index = 0;
+
+            function addSection() {
+                if (index < textArray.length) {
+                    const { content, isTitle, isWordByWord } = textArray[index];
+                    const containerDiv = document.createElement("div");
+
+                    // Aplica la clase de título si es necesario
+                    if (isTitle) containerDiv.classList.add("title");
+
+                    // Divide el contenido en palabras o letras según las instrucciones
+                    const splitContent = isWordByWord ? content.split(" ") : Array.from(content);
+
+                    // Añade el contenido con animación
+                    addCharacters(containerDiv, splitContent, isWordByWord);
+                    
+                    // Añade el contenedor al DOM
+                    container.appendChild(containerDiv);
+
+                    // Añade salto de línea doble
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(document.createElement("br"));
+
+                    index++;
+                    setTimeout(addSection, splitContent.length * (isWordByWord ? 500 : 250) + 500);
+                }
+            }
+            addSection();
+        }
+
+        // Función para agregar caracteres o palabras con el retraso correspondiente
+        function addCharacters(containerDiv, characters, isWordByWord) {
+            let i = 0;
+
+            function add() {
+                if (i < characters.length) {
+                    const span = document.createElement("span");
+                    span.textContent = characters[i] === "pi" ? "pi" : characters[i];
+                    containerDiv.appendChild(span);
+                    i++;
+
+                    // Controla el retraso de cada palabra o letra
+                    setTimeout(add, characters[i - 1] === "pi" ? 500 : (isWordByWord ? 700 : 150));
+                }
+            }
+            add();
+        }
+    </script>
+</body>
+</html>
